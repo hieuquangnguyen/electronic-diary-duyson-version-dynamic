@@ -1,0 +1,167 @@
+.container {
+  /* padding-bottom: 50px; */
+  border: solid rgb(153, 152, 152) 7px;
+  border-top: none;
+  border-bottom: none;
+}
+/* row dau tien */
+.rowOne {
+  padding: 10px;
+  background-color: #bee9e8;
+}
+/* hinh anh so nhat ki */
+.sonhatki {
+  display: flex;
+  justify-content: right;
+}
+.coverTitle {
+  display: flex;
+  justify-content: left;
+  padding-left: 50px;
+  /* background-color: #bde0fe; */
+}
+.titleNKTN {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.titleNKTN h3 {
+  font-size: 25px;
+  color: red;
+}
+.titleNKTN h5 {
+  color: blue;
+  font-size: 20px;
+}
+
+/* menu */
+/* have a sweet time */
+.hast b {
+  font-size: 16px;
+  padding-left: 10px;
+  color: #ffff3f;
+}
+
+.CustomMenu {
+  margin-bottom: 0px;
+}
+.NavMenuCustom {
+  font-size: 16px !important;
+  font-weight: 700;
+  color: #ebf669;
+}
+
+.NavMenuCustom {
+  text-decoration: none;
+  padding: 10px;
+}
+
+.NavMenuCustom:hover {
+  color: white;
+}
+.formSearch {
+  display: flex;
+  padding: 10px;
+}
+.rowContent {
+  min-height: 1000px;
+  flex-direction: column;
+  background-color: #edf2f4;
+  margin-top: -16px;
+}
+
+.rowFooter {
+  padding-top: 20px !important;
+  padding: 30px;
+  background-color: #bee9e8;
+  /* background-color: #aed9e0; */
+}
+.rowFooter .titleFooter {
+  font-size: 17px;
+  color: red;
+  text-align: center;
+}
+.rowFooter .contentFooter {
+  font-size: 16px;
+}
+.ColMangXaHoi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.iconFbYoutube {
+  padding-top: 10px;
+}
+.socialFooter1 {
+  padding-right: 10px;
+}
+.socialFooter2 {
+  padding-right: 10px;
+}
+
+.ColMenuFooter {
+  display: flex;
+  flex-direction: column;
+}
+.contentMenuFooter {
+  display: flex;
+  /* justify-content: center; */
+}
+.contentMenuFooter a {
+  text-decoration: none;
+}
+.menuF {
+  font-size: 16px;
+  font-weight: 700;
+}
+.ColContactFooter {
+  display: flex;
+  flex-direction: column;
+}
+.rowFooter h5 {
+  text-align: center;
+}
+/* CSS cho màn hình nhỏ */
+@media (max-width: 991px) {
+  .sonhatki {
+    /* Kiểu dáng cho màn hình nhỏ */
+    /* display: flex;
+    justify-content: center; */
+    display: none;
+  }
+
+  .coverTitle {
+    /* Kiểu dáng cho màn hình nhỏ */
+    display: flex;
+    justify-content: center;
+    padding-left: 0px;
+  }
+  .titleNKTN h3 {
+    font-size: 25px;
+    margin-top: 10px;
+    /* padding-left: 0px; */
+  }
+  .titleNKTN h5 {
+    font-size: 20px;
+  }
+  .rowFooter {
+    flex-direction: column;
+  }
+  .rowFooter .titleFooter {
+    padding-top: 20px;
+  }
+}
+
+.btnLogin {
+  text-decoration: none;
+  border-radius: 10px;
+  padding: 5px;
+  color: white;
+  background-color: black;
+}
+.btnLogin:hover {
+  background-color: #edf2f4;
+  border: solid 1px black;
+  color: black;
+}

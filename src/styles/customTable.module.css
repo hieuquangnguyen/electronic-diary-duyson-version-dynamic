@@ -1,0 +1,29 @@
+.custom_table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.custom_table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.custom_table td,
+.custom_table th {
+  padding: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.custom_table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.custom_tr {
+  text-align: center;
+  height: 50px;
+}
+.custom_td {
+  height: 50px;
+  overflow-y: scroll;
+}

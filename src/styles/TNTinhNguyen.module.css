@@ -1,0 +1,28 @@
+.headerPage {
+  text-align: center;
+  padding: 5px;
+}
+.buttonShare {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+.customAlert {
+  position: fixed; /* Đặt vị trí của alert */
+  top: 10px;
+  left: 80%;
+  transform: translateX(-50%); /* Dịch chuyển sang trái 50% để căn giữa */
+  z-index: 1000; /* Đảm bảo alert nổi lên trên các phần khác */
+  border: solid 3px grey;
+
+  background-color: #eef99b;
+  /* Định dạng thêm nếu cần */
+  width: auto; /* Chiều rộng tự động vừa với nội dung */
+  max-width: 90%; /* Chiều rộng tối đa */
+  padding-right: 20px;
+  padding-left: 20px;
+  border-radius: 5px; /* Bo tròn viền */
+}
+.customAlert p {
+  color: #045781;
+}

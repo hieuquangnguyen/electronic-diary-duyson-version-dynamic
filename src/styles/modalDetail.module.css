@@ -1,0 +1,17 @@
+.content {
+  text-align: justify;
+  overflow-y: scroll;
+  height: 300px;
+  border: solid 1px grey;
+  padding-left: 7px;
+  padding-right: 7px;
+  /* thụt lề */
+  /* text-indent: 50px; */
+}
+.content {
+  margin-top: 10px;
+  padding-top: 5px;
+}
+.coverContentModalDetail {
+  font-size: 16px;
+}
