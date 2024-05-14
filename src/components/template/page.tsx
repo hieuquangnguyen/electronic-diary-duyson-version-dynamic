@@ -168,12 +168,12 @@ export default function Template({ children }: { children: React.ReactNode }) {
                 </Link>
               </div>
               <div className={css.contentMenuFooter}>
-                <Link href="/NKTNLamTheoLoiBac" className={css.menuF}>
+                <Link href="/TNLamTheoLoiBac" className={css.menuF}>
                   Thanh Niên Làm Theo Lời Bác
                 </Link>
               </div>
               <div className={css.contentMenuFooter}>
-                <Link href="/NKTNTinhNguyen" className={css.menuF}>
+                <Link href="/TNTinhNguyen" className={css.menuF}>
                   Thanh Niên Tình Nguyện
                 </Link>
               </div>
@@ -220,11 +220,9 @@ export default function Template({ children }: { children: React.ReactNode }) {
           <div style={{ textAlign: "center" }}>
             <hr />
             <b>CHỨC NĂNG DÀNH CHO QUẢN TRỊ VIÊN: &nbsp;</b>
-            
             <Link href="/Login" className={css.btnLogin}>
               <b>Login</b>
             </Link>{" "}
-
             <hr />
           </div>
         </Row>
