@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import Link from "next/link";
@@ -8,12 +8,16 @@ import css from "@/components/template/template.module.css";
 const Page = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle login logic here
-    console.log("Email:", email);
-    console.log("Password:", password);
+  const handleSubmit = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+
+    if (email === "quanghieu@gmail.com" && password === "123123") {
+      window.location.href = "/UiAdmin";
+    } else {
+      setError("Email hoặc mật khẩu không chính xác.");
+    }
   };
 
   return (
@@ -36,8 +40,9 @@ const Page = () => {
               <Form.Control
                 type="email"
                 placeholder="Nhập email"
+                id="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(event) => setEmail(event.target.value)}
                 required
               />
             </Form.Group>
@@ -45,19 +50,20 @@ const Page = () => {
               <Form.Label>Mật Khẩu</Form.Label>
               <Form.Control
                 type="password"
-                placeholder="Nhập password"
+                id="password"
+                placeholder="Nhập mật khẩu"
+                name="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(event) => setPassword(event.target.value)}
                 required
               />
             </Form.Group>
-            <Form.Group controlId="formBasicCheckbox" className="mb-3">
-              <Form.Check type="checkbox" label="Remember me" />
-            </Form.Group>
+
             <div className="d-flex justify-content-between">
               <Button variant="primary" type="submit">
                 <b>ĐĂNG NHẬP</b>
               </Button>
+              {error && <p className="error">{error}</p>}
               <a href="#" className="align-self-center">
                 Forgot password?
               </a>
