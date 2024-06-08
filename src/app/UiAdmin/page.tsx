@@ -1,17 +1,40 @@
 "use client";
+
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Link from "next/link";
 import Image from "react-bootstrap/Image";
-import { Form, Button } from "react-bootstrap";
-import Tab from "react-bootstrap/Tab";
-import Tabs from "react-bootstrap/Tabs";
 import css from "@/styles/Admin.module.css";
+import { AdvanceTable } from "@/components/advance-table/advance-table";
+import { LogRepository } from "@/repositories/log-repository";
+import { useEffect, useState } from "react";
 
-import DataTable from "@/components/tableDiary/page";
+const logRepository = new LogRepository();
 
 const DiaryForm = () => {
+  const [logs, setLogs] = useState<any[]>([]);
+
+  useEffect(() => {
+    logRepository.read()
+      .then((response) => setLogs(response));
+  }, []);
+
+  const onRowAdd = (newData: any) => {
+    return logRepository
+      .add(newData)
+      .then((ref) => setLogs([...logs, {
+        ...newData,
+        id: ref?.id,
+      }]));
+  }
+
+  const onRowDelete = (oldData: any) => {
+    return logRepository
+      .remove(oldData.id)
+      .then((ref) => setLogs(logs.filter((log) => log?.id !== oldData?.id)));
+  }
+
   return (
     <Container>
       {/* title quản lí nhật kí */}
@@ -20,81 +43,31 @@ const DiaryForm = () => {
       {/* tab row */}
       <br />
       <Row>
-        <Tabs defaultActiveKey="add" id="quanlitabs" className="mb-3">
-          <Tab eventKey="add" title="Tạo Nhật Kí Mới">
-            <Container>
-              <Form>
-                <Form.Group className="mb-3">
-                  <Form.Label>Thể Loại Nhật Kí</Form.Label>
-                  <Form.Select aria-label="Default select example">
-                    <option disabled>Chọn Thể Loại Nhật Kí</option>
-                    <option value="1">Nhật Kí Thanh Niên Tình Nguyện</option>
-                    <option value="2">
-                      Nhật Kí Thanh Niên Làm Theo Lời Bác
-                    </option>
-                  </Form.Select>
-                </Form.Group>
+        <Container>
+          <AdvanceTable
+            columns={[
+              { title: 'Id', field: 'id', editable: 'never' },
+              { title: 'Title', field: 'title', initialEditValue: 'initial edit value' },
+              { title: 'Content', field: 'content', },
+              {
+                title: 'Address',
+                field: 'address',
+              },
+            ]}
+            initialData={logs}
+            editable={{
+              onRowAdd,
+              onRowUpdate: (newData, oldData) =>
+                new Promise((resolve, reject) => {
+                  setTimeout(() => {
 
-                <Form.Group className="mb-3">
-                  <Form.Label>Nhật Kí Số</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="Nhập số thứ tự nhật kí"
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Tên nhật ký</Form.Label>
-                  <Form.Control type="text" placeholder="Nhập tên nhật ký" />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Ngày</Form.Label>
-                  <Form.Control type="date" />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Tác giả</Form.Label>
-                  <Form.Control type="text" placeholder="Nhập tên tác giả" />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Địa chỉ</Form.Label>
-                  <Form.Control type="text" placeholder="Nhập địa chỉ" />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Mục đích</Form.Label>
-                  <Form.Control type="text" placeholder="Nhập mục đích" />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Nội dung</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={3}
-                    placeholder="Nhập nội dung"
-                  />
-                </Form.Group>
-
-                <div className={css.btnThem}>
-                  <Button variant="primary" type="submit">
-                    <b>THÊM MỚI NHẬT KÍ</b>
-                  </Button>
-                </div>
-              </Form>
-            </Container>
-          </Tab>
-
-          <Tab
-            eventKey="update"
-            title="Quản Lí Nhật Kí"
-            className={css.tabheight}
-          >
-            {/* data table */}
-            <DataTable />
-          </Tab>
-        </Tabs>
+                    resolve();
+                  }, 1000)
+                }),
+              onRowDelete,
+            }}
+          />
+        </Container>
       </Row>
 
       {/* row footer */}
