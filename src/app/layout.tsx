@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import "bootstrap/dist/css/bootstrap.min.css";
-<<<<<<< Updated upstream
-import { UserProvider } from "@auth0/nextjs-auth0/client";
-=======
+// import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { Provider } from "@/components/provider/provider";
->>>>>>> Stashed changes
 
 export const metadata: Metadata = {
   title: "Nhật Kí Điện Tử",
@@ -18,11 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-<<<<<<< Updated upstream
-      <UserProvider>
+      {/* <UserProvider>
       <body>{children}</body>
-      </UserProvider>
-=======
+      </UserProvider> */}
       <head>
         <link
           rel="stylesheet"
@@ -38,7 +33,6 @@ export default function RootLayout({
           {children}
         </Provider>
       </body>
->>>>>>> Stashed changes
     </html>
   );
 }
