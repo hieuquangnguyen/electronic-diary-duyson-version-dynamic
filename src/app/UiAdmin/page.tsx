@@ -16,24 +16,26 @@ const DiaryForm = () => {
   const [logs, setLogs] = useState<any[]>([]);
 
   useEffect(() => {
-    logRepository.read()
-      .then((response) => setLogs(response));
+    logRepository.read().then((response) => setLogs(response));
   }, []);
 
   const onRowAdd = (newData: any) => {
-    return logRepository
-      .add(newData)
-      .then((ref) => setLogs([...logs, {
-        ...newData,
-        id: ref?.id,
-      }]));
-  }
+    return logRepository.add(newData).then((ref) =>
+      setLogs([
+        ...logs,
+        {
+          ...newData,
+          id: ref?.id,
+        },
+      ])
+    );
+  };
 
   const onRowDelete = (oldData: any) => {
     return logRepository
       .remove(oldData.id)
       .then((ref) => setLogs(logs.filter((log) => log?.id !== oldData?.id)));
-  }
+  };
 
   return (
     <Container>
@@ -46,13 +48,14 @@ const DiaryForm = () => {
         <Container>
           <AdvanceTable
             columns={[
-              { title: 'Id', field: 'id', editable: 'never' },
-              { title: 'Title', field: 'title', initialEditValue: 'initial edit value' },
-              { title: 'Content', field: 'content', },
-              {
-                title: 'Address',
-                field: 'address',
-              },
+              { title: "Id", field: "id", editable: "never" },
+              { title: "Nhật Kí Số", field: "number" },
+              { title: "Tiêu Đề", field: "name" },
+              { title: "Mục Tiêu", field: "purpose" },
+              { title: "Nội Dung", field: "title" },
+              { title: "Tác Giả", field: "author" },
+              { title: "Địa Chỉ", field: "address" },
+              { title: "Ngày Chia Sẻ", field: "created_date" },
             ]}
             initialData={logs}
             editable={{
@@ -60,9 +63,8 @@ const DiaryForm = () => {
               onRowUpdate: (newData, oldData) =>
                 new Promise((resolve, reject) => {
                   setTimeout(() => {
-
                     resolve();
-                  }, 1000)
+                  }, 1000);
                 }),
               onRowDelete,
             }}
