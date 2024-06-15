@@ -1,6 +1,5 @@
 "use client";
 
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Link from "next/link";
@@ -9,14 +8,28 @@ import css from "@/styles/Admin.module.css";
 import { AdvanceTable } from "@/components/advance-table/advance-table";
 import { LogRepository } from "@/repositories/log-repository";
 import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/repositories/repository";
+import { useRouter } from "next/navigation";
 
 const logRepository = new LogRepository();
 
 const DiaryForm = () => {
   const [logs, setLogs] = useState<any[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
-    logRepository.read().then((response) => setLogs(response));
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        logRepository.read().then((response) => setLogs(response));
+      } else {
+        // User is signed out
+        // ...
+        router.push("/Login");
+      }
+    });
   }, []);
 
   const onRowAdd = (newData: any) => {
@@ -34,42 +47,45 @@ const DiaryForm = () => {
   const onRowDelete = (oldData: any) => {
     return logRepository
       .remove(oldData.id)
-      .then((ref) => setLogs(logs.filter((log) => log?.id !== oldData?.id)));
+      .then(() => setLogs(logs.filter((log) => log?.id !== oldData?.id)));
+  };
+
+  const onRowUpdate = (newData: any) => {
+    return logRepository.update(newData?.id, newData).then(() => {
+      logs[newData?.tableData?.id] = {
+        ...logs?.[newData?.tableData?.id],
+        ...newData,
+      };
+      setLogs([...logs]);
+    });
   };
 
   return (
-    <Container>
+    <div className="container-fluid">
       {/* title quản lí nhật kí */}
       <br />
       <Row className={css.title}>QUẢN LÍ NHẬT KÍ ĐIỆN TỬ</Row>
       {/* tab row */}
       <br />
       <Row>
-        <Container>
-          <AdvanceTable
-            columns={[
-              { title: "Id", field: "id", editable: "never" },
-              { title: "Nhật Kí Số", field: "number" },
-              { title: "Tiêu Đề", field: "name" },
-              { title: "Mục Tiêu", field: "purpose" },
-              { title: "Nội Dung", field: "title" },
-              { title: "Tác Giả", field: "author" },
-              { title: "Địa Chỉ", field: "address" },
-              { title: "Ngày Chia Sẻ", field: "created_date" },
-            ]}
-            initialData={logs}
-            editable={{
-              onRowAdd,
-              onRowUpdate: (newData, oldData) =>
-                new Promise((resolve, reject) => {
-                  setTimeout(() => {
-                    resolve();
-                  }, 1000);
-                }),
-              onRowDelete,
-            }}
-          />
-        </Container>
+        <AdvanceTable
+          columns={[
+            { title: "Id", field: "id", editable: "never" },
+            { title: "Nhật Kí Số", field: "postNo" },
+            { title: "Tiêu Đề", field: "name" },
+            { title: "Mục Tiêu", field: "purpose" },
+            { title: "Nội Dung", field: "content" },
+            { title: "Tác Giả", field: "author" },
+            { title: "Địa Chỉ", field: "address" },
+            { title: "Ngày Chia Sẻ", field: "created_date" },
+          ]}
+          initialData={logs}
+          editable={{
+            onRowAdd,
+            onRowUpdate,
+            onRowDelete,
+          }}
+        />
       </Row>
 
       {/* row footer */}
@@ -186,7 +202,7 @@ const DiaryForm = () => {
           </div>
         </Row>
       </Row>
-    </Container>
+    </div>
   );
 };
 

@@ -1,192 +1,192 @@
 "use client";
-import React, { useState, useContext } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import Image from "react-bootstrap/Image";
-import Link from "next/link";
-import css from "@/components/template/template.module.css";
 
-const Page = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { auth } from "@/repositories/repository";
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import { useRouter } from "next/navigation";
 
-  const handleSubmit = (event: React.SyntheticEvent) => {
+function Copyright(props: any) {
+  return (
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
+      <Link color="inherit" href="https://mui.com/">
+        Your Website
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
+
+// TODO remove, this demo shouldn't need to reset the theme.
+
+export default function SignIn() {
+  const router = useRouter();
+  const [user, setUser] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        // ...
+        console.log("uid", user);
+        setUser(user);
+      }
+    });
+  }, []);
+
+  const handleSubmit = (event: any) => {
     event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const email = data.get("email");
+    const password = data.get("password");
+    onLogin(email, password);
+  };
 
-    if (email === "quanghieu@gmail.com" && password === "123123") {
-      window.location.href = "/UiAdmin";
-    } else {
-      setError("Email hoặc mật khẩu không chính xác.");
-    }
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        setUser(null);
+        console.log("Signed out successfully");
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
+
+  const onLogin = (email: string, password: string) => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        router.push("/");
+        console.log(user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
   };
 
   return (
-    <Container className="mt-5">
-      <Row className="justify-content-md-center">
-        <Col md={6}>
-          <div className="text-center mb-4">
-            <Image
-              src="diary.png"
-              className="img-fluid"
-              rounded
-              width={"150px"}
-              height={"180px"}
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        {user ? (
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="email"
+              value={user?.email}
+              disabled
             />
-          </div>
-          <h3 className="text-center">Đăng Nhập</h3>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formEmail" className="mb-3">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Nhập email"
-                id="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                required
-              />
-            </Form.Group>
-            <Form.Group controlId="formPassword" className="mb-3">
-              <Form.Label>Mật Khẩu</Form.Label>
-              <Form.Control
-                type="password"
-                id="password"
-                placeholder="Nhập mật khẩu"
-                name="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                required
-              />
-            </Form.Group>
-
-            <div className="d-flex justify-content-between">
-              <Button variant="primary" type="submit">
-                <b>ĐĂNG NHẬP</b>
-              </Button>
-              {error && <p className="error">{error}</p>}
-              <a href="#" className="align-self-center">
-                Forgot password?
-              </a>
-            </div>
-          </Form>
-        </Col>
-      </Row>
-      <br />
-      <br />
-      {/* row footer */}
-      <Row className={css.rowFooter}>
-        {/* có 3 cột */}
-        <>
-          {/* cột đầu tiên social media */}
-          <Col className={css.ColMangXaHoi}>
-            <div className={css.titleFooter}>
-              <b>MẠNG XÃ HỘI</b>
-            </div>
-            <Row className={css.iconFbYoutube}>
-              <div className={css.contentFooter}>
-                <Link href="#" className={css.socialFooter1}>
-                  <Image
-                    src="facebook.svg"
-                    rounded
-                    width={"50px"}
-                    height={"50px"}
-                  ></Image>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={handleLogout}
+            >
+              Sign Out
+            </Button>
+          </Box>
+        ) : (
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="Email Address"
+              name="email2"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
                 </Link>
-                <Link href="#" className={css.socialFooter2}>
-                  <Image
-                    src="youtube.svg"
-                    rounded
-                    width={"50px"}
-                    height={"50px"}
-                  ></Image>
+              </Grid>
+              <Grid item>
+                <Link href="#" variant="body2">
+                  {"Don't have an account? Sign Up"}
                 </Link>
-              </div>
-            </Row>
-          </Col>
-          {/* cột 2 là menu */}
-          <Col className={css.ColMenuFooter}>
-            <div className={css.titleFooter}>
-              <b>MENU</b>
-            </div>
-            <Row>
-              <div className={css.contentMenuFooter}>
-                <Link href="/" className={css.menuF}>
-                  Trang chủ
-                </Link>
-              </div>
-              <div className={css.contentMenuFooter}>
-                <Link href="/TNLamTheoLoiBac" className={css.menuF}>
-                  Thanh Niên Làm Theo Lời Bác
-                </Link>
-              </div>
-              <div className={css.contentMenuFooter}>
-                <Link href="/TNTinhNguyen" className={css.menuF}>
-                  Thanh Niên Tình Nguyện
-                </Link>
-              </div>
-            </Row>
-          </Col>
-          {/* cột thông tin liên hệ */}
-          <Col className={css.ColContactFooter}>
-            <div className={css.titleFooter}>
-              <b>THÔNG TIN LIÊN HỆ</b>
-            </div>
-            <Row>
-              <div className={css.contentFooter}>
-                <b>SĐT 1: </b>
-                <a href="tel:0987285729" style={{ textDecoration: "none" }}>
-                  <b> 0987 285 729 &#40;Nguyên&#41;</b>
-                </a>
-              </div>
-            </Row>
-            <Row>
-              <div className={css.contentFooter}>
-                <b>SĐT 2: </b>
-                <a href="tel:0399280149" style={{ textDecoration: "none" }}>
-                  {" "}
-                  <b> 0399 280 149 &#40;Nhung&#41;</b>
-                </a>
-              </div>
-            </Row>
-            <Row>
-              <div className={css.contentFooter}>
-                <b>Email: </b>
-                <a
-                  href="mailto:dtnduyson@gmail.com"
-                  style={{ textDecoration: "none" }}
-                >
-                  {" "}
-                  <b> dtnduyson@gmail.com</b>
-                </a>
-              </div>
-            </Row>
-          </Col>
-        </>
-        {/* cột quản trị viên đăng nhập */}
-        <Row>
-          <div style={{ textAlign: "center" }}>
-            <hr />
-            <b>CHỨC NĂNG DÀNH CHO QUẢN TRỊ VIÊN: &nbsp;</b>
-            <Link href="/Login" className={css.btnLogin}>
-              <b>Login</b>
-            </Link>{" "}
-            <hr />
-          </div>
-        </Row>
-        {/* cột thông tin coding by */}
-        <Row>
-          <div style={{ textAlign: "center" }}>
-            <Link href="/#" style={{ textDecoration: "none" }}>
-              ©Coppy right:
-              <b>
-                <i> Quang Hiếu - Harry</i>
-              </b>
-            </Link>
-          </div>
-        </Row>
-      </Row>
+              </Grid>
+            </Grid>
+          </Box>
+        )}
+      </Box>
+      <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
-};
-
-export default Page;
+}

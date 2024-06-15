@@ -10,7 +10,6 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useCommonStore } from "@/stores/common";
 import Form from "react-bootstrap/Form";
-import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 
 // coppy link
@@ -19,16 +18,23 @@ import clipboardCopy from "clipboard-copy";
 import Alert from "react-bootstrap/Alert";
 
 import dataPost from "@/data/diaryContent/postsTheoLoiBac.json";
+import { LogRepository } from "@/repositories/log-repository";
+
+const logRepository = new LogRepository();
 
 const NKLamTheoLoiBac: React.FC = () => {
   // Khai báo state để lưu trạng thái hiển thị của Alert
   const [showAlert, setShowAlert] = useState(false);
+  const [posts, setPosts] = useState<any[]>([]);
 
   // xử lí search
-  const pathname = usePathname();
   const { search } = useCommonStore();
 
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    logRepository.read().then((response) => setPosts(response));
+  }, []);
 
   // coppy link
   // Định nghĩa hàm copyLink để sao chép liên kết của bài viết
@@ -95,11 +101,10 @@ const NKLamTheoLoiBac: React.FC = () => {
     setPostIdToOpen(postId);
   }
 
-  // tạo một mảng posts
-  const posts = dataPost;
-
   // lọc search
-  const filteredPosts = posts.filter((post) => post.title.includes(keywords));
+  const filteredPosts = posts.filter((post: any) =>
+    post?.name?.includes(keywords)
+  );
 
   return (
     <>
@@ -140,22 +145,22 @@ const NKLamTheoLoiBac: React.FC = () => {
                   {filteredPosts.map((post) => (
                     // Nhật kí số 1
                     <Accordion.Item
-                      eventKey={post.id}
-                      id={`post${post.id}`}
-                      key={post.id}
-                      onClick={() => handlePostClick(post.id)} // Gọi hàm handlePostClick khi bài viết được click
+                      eventKey={post?.id}
+                      id={`post${post?.id}`}
+                      key={post?.id}
+                      onClick={() => handlePostClick(post?.id)} // Gọi hàm handlePostClick khi bài viết được click
                     >
-                      <Accordion.Header>{post.title}</Accordion.Header>
+                      <Accordion.Header>{post?.name}</Accordion.Header>
 
                       <Accordion.Body>
                         <DiaryItem
-                          IdDiary={post.content.IdDiary}
-                          DiaryName={post.content.DiaryName}
-                          Date={post.content.Date}
-                          Author={post.content.Author}
-                          Address={post.content.Address}
-                          Purpose={post.content.Purpose}
-                          Content={post.content.Content}
+                          IdDiary={post?.postNo}
+                          DiaryName={post?.name}
+                          Date={post?.created_date}
+                          Author={post?.author}
+                          Address={post?.address}
+                          Purpose={post?.purpose}
+                          Content={post?.content}
                         />
 
                         <div className={css.buttonShare}>

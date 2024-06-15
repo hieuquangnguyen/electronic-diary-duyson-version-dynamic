@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import {
   getFirestore,
   collection,
@@ -31,6 +32,8 @@ const firebaseConfig = {
 // Initialize Firebase
 
 const app = initializeApp(firebaseConfig);
+
+export const auth = getAuth(app);
 
 export class Repository {
   db: Firestore;
@@ -81,7 +84,6 @@ export class Repository {
       const querySnapshot = await getDocs(
         collection(this.db, this.collectionName)
       );
-
       const data: any[] = [];
 
       querySnapshot.forEach((item) => {
