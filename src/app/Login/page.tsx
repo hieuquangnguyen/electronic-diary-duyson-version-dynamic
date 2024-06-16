@@ -20,6 +20,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import NotificationDialog from "@/components/dialog";
 
 function Copyright(props: any) {
   return (
@@ -44,6 +45,10 @@ function Copyright(props: any) {
 export default function SignIn() {
   const router = useRouter();
   const [user, setUser] = React.useState<any>(null);
+  const [dialog, setDialog] = React.useState({
+    content: "",
+    open: false,
+  });
 
   React.useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -60,8 +65,8 @@ export default function SignIn() {
   const handleSubmit = (event: any) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const email = data.get("email");
-    const password = data.get("password");
+    const email = data.get("user_email")?.toString() || "";
+    const password = data.get("password")?.toString() || "";
     onLogin(email, password);
   };
 
@@ -74,6 +79,11 @@ export default function SignIn() {
       })
       .catch((error) => {
         // An error happened.
+        setDialog({
+          ...dialog,
+          content: `A error has occured : ${JSON.stringify(error)}`,
+          open: true,
+        });
       });
   };
 
@@ -89,11 +99,23 @@ export default function SignIn() {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
+        setDialog({
+          ...dialog,
+          content: `A error has occured : ${JSON.stringify(error)}`,
+          open: true,
+        });
       });
   };
 
   return (
     <Container component="main" maxWidth="xs">
+      <NotificationDialog
+        title="Authentication"
+        content={dialog.content}
+        open={dialog.open}
+        onAgree={() => setDialog({ ...dialog, open: false })}
+        onClose={() => setDialog({ ...dialog, open: false })}
+      />
       <CssBaseline />
       <Box
         sx={{
@@ -146,7 +168,7 @@ export default function SignIn() {
               required
               fullWidth
               label="Email Address"
-              name="email2"
+              name="user_email"
               autoFocus
             />
             <TextField

@@ -220,7 +220,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
           <div style={{ textAlign: "center" }}>
             <hr />
             <b>CHỨC NĂNG DÀNH CHO QUẢN TRỊ VIÊN: &nbsp;</b>
-            <Link href="/Login" className={css.btnLogin}>
+            <Link href="/login" className={css.btnLogin}>
               <b>Login</b>
             </Link>{" "}
             <hr />
