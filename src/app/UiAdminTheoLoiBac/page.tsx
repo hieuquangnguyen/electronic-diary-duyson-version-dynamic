@@ -224,7 +224,7 @@ const DiaryForm = () => {
             <div style={{ textAlign: "center" }}>
               <hr />
               <b>CHỨC NĂNG DÀNH CHO QUẢN TRỊ VIÊN: &nbsp;</b>
-              <Link href="/login" className={css.btnLogin}>
+              <Link href="/authLogin" className={css.btnLogin}>
                 <b>Login</b>
               </Link>{" "}
               <hr />
