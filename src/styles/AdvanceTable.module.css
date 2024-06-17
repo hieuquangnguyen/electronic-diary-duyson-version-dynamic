@@ -1,0 +1,6 @@
+.table-row {
+  height: 50px; /* Chiều cao cố định của hàng */
+  overflow: hidden; /* Ẩn nội dung thừa */
+  white-space: nowrap; /* Không cho phép xuống dòng */
+  text-overflow: ellipsis; /* Thêm dấu ba chấm nếu nội dung quá dài */
+}

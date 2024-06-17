@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "react-bootstrap/Image";
 import css from "@/styles/Admin.module.css";
 import { AdvanceTable } from "@/components/advance-table/advance-table";
-import { LogRepository } from "@/repositories/log-repository";
+import { LogRepositoryTN } from "@/repositories/log-repository-TN";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/repositories/repository";
@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { truncate } from "fs/promises";
 import { Box, CircularProgress } from "@mui/material";
 
-const logRepository = new LogRepository();
+const logRepositorytn = new LogRepositoryTN();
 
 const DiaryForm = () => {
   const [logs, setLogs] = useState<any[]>([]);
@@ -27,7 +27,7 @@ const DiaryForm = () => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
-        logRepository.read().then((response) => setLogs(response));
+        logRepositorytn.read().then((response) => setLogs(response));
         setGranted(true);
       } else {
         // User is signed out
@@ -39,7 +39,7 @@ const DiaryForm = () => {
   }, []);
 
   const onRowAdd = (newData: any) => {
-    return logRepository.add(newData).then((ref) =>
+    return logRepositorytn.add(newData).then((ref) =>
       setLogs([
         ...logs,
         {
@@ -51,13 +51,13 @@ const DiaryForm = () => {
   };
 
   const onRowDelete = (oldData: any) => {
-    return logRepository
+    return logRepositorytn
       .remove(oldData.id)
       .then(() => setLogs(logs.filter((log) => log?.id !== oldData?.id)));
   };
 
   const onRowUpdate = (newData: any) => {
-    return logRepository.update(newData?.id, newData).then(() => {
+    return logRepositorytn.update(newData?.id, newData).then(() => {
       logs[newData?.tableData?.id] = {
         ...logs?.[newData?.tableData?.id],
         ...newData,
@@ -71,7 +71,9 @@ const DiaryForm = () => {
       <div className="container-fluid">
         {/* title quản lí nhật kí */}
         <br />
-        <Row className={css.title}>QUẢN LÍ NHẬT KÍ ĐIỆN TỬ</Row>
+        <Row className={css.title}>
+          QUẢN LÍ NHẬT KÍ ĐIỆN TỬ - THANH NIÊN TÌNH NGUYỆN
+        </Row>
         {/* tab row */}
         <br />
         <Row>
@@ -80,10 +82,41 @@ const DiaryForm = () => {
               { title: "Id", field: "id", editable: "never" },
               { title: "Nhật Kí Số", field: "postNo" },
               { title: "Tiêu Đề", field: "name" },
-              { title: "Mục Tiêu", field: "purpose" },
-              { title: "Nội Dung", field: "content" },
+              {
+                title: "Mục Tiêu",
+                field: "purpose",
+                cellStyle: {
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "100px",
+                  maxHeight: "80px",
+                },
+              },
+              // { title: "Nội Dung", field: "content" },
+              {
+                title: "Nội Dung",
+                field: "content",
+                cellStyle: {
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "100px",
+                  maxHeight: "80px",
+                },
+              },
               { title: "Tác Giả", field: "author" },
-              { title: "Địa Chỉ", field: "address" },
+              {
+                title: "Địa Chỉ",
+                field: "address",
+                cellStyle: {
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "100px",
+                  maxHeight: "80px",
+                },
+              },
               { title: "Ngày Chia Sẻ", field: "created_date" },
             ]}
             initialData={logs}

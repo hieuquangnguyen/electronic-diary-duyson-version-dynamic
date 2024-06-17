@@ -17,7 +17,7 @@ import clipboardCopy from "clipboard-copy";
 
 import Alert from "react-bootstrap/Alert";
 
-import dataPost from "@/data/diaryContent/postsTheoLoiBac.json";
+// import dataPost from "@/data/diaryContent/postsTheoLoiBac.json";
 import { LogRepository } from "@/repositories/log-repository";
 
 const logRepository = new LogRepository();
