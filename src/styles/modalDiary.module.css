@@ -17,7 +17,7 @@
 .modal_wrapper {
   width: 70%;
   height: 550px;
-  border: solid 5px #c7f9cc;
+  border: solid 5px #cfe2ff;
   border-radius: 10px;
 }
 
@@ -48,7 +48,7 @@
 .modal_header {
   width: 100%;
   /* display: flex; */
-  background-color: #c7f9cc;
+  background-color: #cfe2ff;
   height: 50px;
 }
 .modal_header a {
