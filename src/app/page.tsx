@@ -129,7 +129,7 @@ export default function Home() {
                   rounded
                 />
                 <Carousel.Caption className={css.customCaptions}>
-                  <h3>Tháng 4 Năm 2023</h3>
+                  <h3>Năm 2023</h3>
                   <h5>
                     Chương Trình Bảo Vệ Môi Trường, Thu Pin Cũ Đổi Pin Mới.
                   </h5>

@@ -234,7 +234,10 @@ const DiaryForm = () => {
           {/* cột thông tin coding by */}
           <Row>
             <div style={{ textAlign: "center" }}>
-              <Link href="/#" style={{ textDecoration: "none" }}>
+              <Link
+                href="/https://biopage.vn/harry-profile"
+                style={{ textDecoration: "none" }}
+              >
                 ©Coppy right:
                 <b>
                   <i> Quang Hiếu - Harry</i>
